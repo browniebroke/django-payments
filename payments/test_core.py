@@ -9,6 +9,7 @@ from . import PaymentStatus
 from .forms import CreditCardPaymentFormWithName
 from .forms import PaymentForm
 from .models import BasePayment
+from .test_helpers import if_drf_installed
 
 
 class TestHelpers(TestCase):
@@ -202,6 +203,15 @@ class TestPaymentForm(TestCase):
         form = PaymentForm(data=data, hidden_inputs=True)
         self.assertEqual(len(form.fields), len(data))
         self.assertEqual(form.fields["field1"].initial, "value1")
+
+
+@if_drf_installed
+class TestPaymentSerializer(TestCase):
+    def test_init_with_data(self):
+        from payments.serializers import PaymentSerializer
+
+        serializer = PaymentSerializer(data={"status": "waiting"})
+        self.assertTrue(serializer.is_valid())
 
 
 class TestCardIssuer(TestCase):

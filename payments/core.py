@@ -95,6 +95,11 @@ class BasicProvider:
             self.get_hidden_fields(payment), self.get_action(payment), self._method
         )
 
+    def get_serializer(self, payment, data=None):
+        from .serializers import PaymentSerializer
+
+        return PaymentSerializer(data=data)
+
     def process_data(self, payment, request):
         """Process callback request from a payment provider.
 

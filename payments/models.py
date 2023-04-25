@@ -142,6 +142,13 @@ class BasePayment(models.Model):
         provider = provider_factory(self.variant, self)
         return provider.get_form(self, data=data)
 
+    def get_serializer(self, data=None):
+        """
+        Return a DRF serializer to be used to complete this payment.
+        """
+        provider = provider_factory(self.variant, self)
+        return provider.get_serializer(self, data=data)
+
     def get_purchased_items(self) -> Iterable[PurchasedItem]:
         """Return an iterable of purchased items.
 
