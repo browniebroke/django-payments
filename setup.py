@@ -65,6 +65,7 @@ setup(
         "sagepay": ["cryptography>=1.1.0"],
         "sofort": ["xmltodict>=0.9.2"],
         "stripe": ["stripe>=2.6.0"],
+        "drf": ["djangorestframework>=3.12"],
     },
     zip_safe=False,
 )
