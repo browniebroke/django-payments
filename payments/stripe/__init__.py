@@ -42,6 +42,22 @@ class StripeProvider(BasicProvider):
             raise RedirectNeeded(payment.get_success_url())
         return form
 
+    def get_serializer(self, payment, data=None):
+        if payment.status == PaymentStatus.WAITING:
+            payment.change_status(PaymentStatus.INPUT)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=data, payment=payment, provider=self)
+
+        if serializer.is_valid():
+            serializer.save()
+            raise RedirectNeeded(payment.get_success_url())
+        return serializer
+
+    def get_serializer_class(self):
+        from .serializers import ModalPaymentSerializer
+
+        return ModalPaymentSerializer
+
     def capture(self, payment, amount=None):
         amount = int((amount or payment.total) * 100)
         charge = stripe.Charge.retrieve(payment.transaction_id)
@@ -76,3 +92,8 @@ class StripeCardProvider(StripeProvider):
     """
 
     form_class = PaymentForm
+
+    def get_serializer_class(self):
+        from .serializers import PaymentSerializer
+
+        return PaymentSerializer
