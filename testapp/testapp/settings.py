@@ -2,6 +2,11 @@ from pathlib import Path
 
 import dj_database_url
 
+try:
+    import rest_framework
+except ImportError:
+    rest_framework = None
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,6 +34,9 @@ INSTALLED_APPS = [
     "testapp.testmain",
     "payments",
 ]
+
+if rest_framework:
+    INSTALLED_APPS.append("rest_framework")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
